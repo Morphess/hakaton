@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список PDF</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="container mt-5">
+            <!-- Хлібні крихти -->
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'upload_pdf' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">PDF List</li>
+                </ol>
+            </nav>
+        <h2>Список PDF-файлів</h2>
+        <ul class="list-group">
+            {% for pdf in pdfs %}
+                <li class="list-group-item">
+                    <a href="{{ pdf.file.url }}" target="_blank">{{ pdf.title }}</a> 
+                    <!-- Форма для видалення PDF -->
+                    <form method="post" action="{% url 'delete_pdf' pdf.id %}"  style="display:inline; float:right; margin-left:10px;" onsubmit="return confirm('Ви впевнені, що хочете видалити цей документ?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Видалити</button>
+                    </form>
+                    <form method="post" action="{% url 'convert_pdf_to_text' pdf.id %}"  style="display:inline; float:right; margin-left:10px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-info">Конвертувати в текст</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>
